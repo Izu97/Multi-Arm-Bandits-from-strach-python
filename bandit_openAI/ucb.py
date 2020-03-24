@@ -1,3 +1,4 @@
+import os
 import gym
 import numpy as np
 from variables import *
@@ -7,7 +8,7 @@ from matplotlib import pyplot as plt
 class MultiArmBandits(object):
     def __init__(self):
         self.env = gym.make(environment)
-        self.q_values = np.random.uniform(0,1,self.env.action_space.n)
+        self.q_values = np.load(q_value_path) if os.path.exists(q_value_path) else np.random.uniform(0,1,self.env.action_space.n)
         self.action_taken = np.ones(self.env.action_space.n, dtype=int)
 
     def agent(self):
@@ -54,7 +55,10 @@ class MultiArmBandits(object):
         plt.ylabel('Cumulative Average Reward')
         fig.savefig('ucb.png')
 
+    def save_q_table(self): # save q values to use as initial value in next run
+        np.save(q_value_path, self.q_values)
 
 if __name__ == "__main__":
     bandit =  MultiArmBandits()
     bandit.agent()
+    bandit.save_q_table()
