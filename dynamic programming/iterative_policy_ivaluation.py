@@ -42,15 +42,11 @@ class IterativePolicyEvaluation(object):
 
     def policy_evaluation(self):
         self.initialize_V()
-        step = 0
         while True:
             diff = self.value_step()
-            if step % verbose == 0:
-                print(step)
             if diff < delta:
                 self.print_values()
-                break
-            step += 1
+                return None
 
     def print_values(self):
         for i in range(self.grid.rows):
